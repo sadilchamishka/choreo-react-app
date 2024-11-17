@@ -17,8 +17,8 @@
  */
 
 import { BasicUserInfo } from "@asgardeo/auth-react";
-import React, { FunctionComponent, ReactElement, useState } from "react";
-import './home.css'
+import React, { FunctionComponent, ReactElement } from "react";
+import { JsonViewer } from '@textea/json-viewer'
 
 /**
  * Decoded ID Token Response component Prop types interface.
@@ -64,106 +64,94 @@ export const AuthenticationResponse: FunctionComponent<AuthenticationResponsePro
         derivedResponse
     } = props;
 
-    const [formData, setFormData] = useState({
-        gravity: '1.013',
-        ph: '6.19',
-        osmo: '443',
-        cond: '14.8',
-        urea: '124',
-        calc: '1.45',
-      });
-    
-      const [prediction, setPrediction] = useState('');
-      const [risk, setRisk] = useState(0); // Progress cycle percentage
-    
-      const handleChange = (e: { target: { name: any; value: any; }; }) => {
-        setFormData({
-          ...formData,
-          [e.target.name]: e.target.value,
-        });
-      };
-    
-      const handleSubmit = (e: { preventDefault: () => void; }) => {
-        e.preventDefault();
-    
-        //Example logic for prediction and risk calculation
-        const calculatedRisk = Math.random() * 100; 
-        // setRisk(calculatedRisk.toFixed(2));
-        setPrediction('You are not at the risk of getting Kidney Stone'); 
-      };
-
     return (
-        <div className="home-container">
-          <h2>Kidney Stone Risk Prediction</h2>
-          <form onSubmit={handleSubmit} className="input-form">
-            <label>
-              Gravity:
-              <input
-                type="text"
-                name="gravity"
-                value={formData.gravity}
-                onChange={handleChange}
-                required
-              />
-            </label>
-            <label>
-              pH:
-              <input
-                type="text"
-                name="ph"
-                value={formData.ph}
-                onChange={handleChange}
-                required
-              />
-            </label>
-            <label>
-              Osmo:
-              <input
-                type="text"
-                name="osmo"
-                value={formData.osmo}
-                onChange={handleChange}
-                required
-              />
-            </label>
-            <label>
-              Cond:
-              <input
-                type="text"
-                name="cond"
-                value={formData.cond}
-                onChange={handleChange}
-                required
-              />
-            </label>
-            <label>
-              Urea:
-              <input
-                type="text"
-                name="urea"
-                value={formData.urea}
-                onChange={handleChange}
-                required
-              />
-            </label>
-            <label>
-              Calc:
-              <input
-                type="text"
-                name="calc"
-                value={formData.calc}
-                onChange={handleChange}
-                required
-              />
-            </label>
-            <button type="submit">Submit</button>
-          </form>
-          <div className="prediction-container">
-            <h3>Prediction: {prediction}</h3>
-            <div className="progress-container">
-              <p>Risk of Kidney Stone: {risk}%</p>
+        <>
+            <h2>Authentication Response</h2>
+            <h4 className="sub-title">
+                Derived by the&nbsp;
+                <code className="inline-code-block">
+                    <a href="https://www.npmjs.com/package/@asgardeo/auth-react/v/latest"
+                       target="_blank"
+                       rel="noreferrer"
+                    >
+                        @asgardeo/auth-react
+                    </a>
+                </code>&nbsp;SDK
+            </h4>
+            <div className="json">
+                <JsonViewer
+                    className="asg-json-viewer"
+                    value={ derivedResponse?.authenticateResponse }
+                    enableClipboard={ false }
+                    displayObjectSize={ false }
+                    displayDataTypes={ false }
+                    rootName={ false }
+                    theme="dark"
+                />
             </div>
-          </div>
-        </div>
-      );
+            <h2 className="mb-0 mt-4">ID token</h2>
+            <div className="row">
+                { derivedResponse?.idToken && (
+                    <div className="column">
+                        <h5>
+                            <b>Encoded</b>
+                        </h5>
+                        <div className="code">
+                            <code>
+                                <span className="id-token-0">{ derivedResponse?.idToken[0] }</span>.
+                                <span className="id-token-1">{ derivedResponse?.idToken[1] }</span>.
+                                <span className="id-token-2">{ derivedResponse?.idToken[2] }</span>
+                            </code>
+                        </div>
+                    </div>
+                ) }
+                <div className="column">
+                    <div className="json">
+                        <h5>
+                            <b>Decoded:</b> Header
+                        </h5>
+                        <JsonViewer
+                            className="asg-json-viewer"
+                            value={ derivedResponse?.decodedIdTokenHeader }
+                            enableClipboard={ false }
+                            displayObjectSize={ false }
+                            displayDataTypes={ false }
+                            rootName={ false }
+                            theme="dark"
+                        />
+                    </div>
+
+                    <div className="json">
+                        <h5>
+                            <b>Decoded:</b> Payload
+                        </h5>
+                        <JsonViewer
+                            className="asg-json-viewer"
+                            value={ derivedResponse?.decodedIDTokenPayload }
+                            enableClipboard={ false }
+                            displayObjectSize={ false }
+                            displayDataTypes={ false }
+                            rootName={ false }
+                            theme="dark"
+                        />
+                    </div>
+                    <div className="json">
+                        <h5>Signature</h5>
+                        <div className="code">
+                            <code>
+                                HMACSHA256(
+                                <br/>
+                                &nbsp;&nbsp;<span className="id-token-0">base64UrlEncode(
+                                                <span className="id-token-1">header</span>)</span> + "." + <br/>
+                                &nbsp;&nbsp;<span className="id-token-0">base64UrlEncode(
+                                                <span className="id-token-1">payload</span>)</span>,&nbsp;
+                                <span className="id-token-1">your-256-bit-secret</span> <br/>
+                                );
+                            </code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
 };

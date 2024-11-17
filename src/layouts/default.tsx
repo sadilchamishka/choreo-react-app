@@ -17,6 +17,9 @@
  */
 
 import React, { FunctionComponent, PropsWithChildren, ReactElement } from "react";
+import FOOTER_LOGOS from "../images/footer.png";
+import ContentLoader from "react-content-loader";
+import { LoadContent } from "./content-loader";
 
 /**
  * Decoded ID Token Response component Prop types interface.
@@ -52,15 +55,17 @@ export const DefaultLayout: FunctionComponent<PropsWithChildren<DefaultLayoutPro
 
     return (
         <>
-            <div className="container">
-                {
-                    isLoading
-                        ? <div className="content">Loading ...</div>
-                        : hasErrors
-                            ? <div className="content">An error occured while authenticating ...</div>
-                            : children
-                }
-            </div>
+            {isLoading? (
+                <LoadContent/>
+            ) : (
+                <div className="container">
+                    {
+                        hasErrors
+                                ? <div className="content">An error occured while authenticating ...</div>
+                                : children
+                    }
+                </div>
+            )}
         </>
     );
 };

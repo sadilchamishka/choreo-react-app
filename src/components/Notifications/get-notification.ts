@@ -1,4 +1,4 @@
-<!--
+/**
  * Copyright (c) 2021, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
@@ -14,36 +14,16 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- -->
+ */
 
-<!DOCTYPE html>
-<html>
+import { getPetInstance } from "../CreatePet/instance";
 
-<head>
-    <meta charset="utf-8" />
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta
-        name="referrer"
-        content="no-referrer"
-    />
-
-    <title>Sample react based SPA with Asgardeo Auth React SDK</title>
-
-    <link
-        rel="icon"
-        type="image/x-icon"
-        href="favicon.ico"
-    >
-</head>
-
-<body>
-    <noscript>
-        You need to enable JavaScript to run this app.
-    </noscript>
-    <div id="root"></div>
-</body>
-
-</html>
+export async function getNotification(accessToken: string) {
+    const headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
+      const response = await getPetInstance().get("/settings", {
+        headers: headers,
+      });
+      return response;
+}

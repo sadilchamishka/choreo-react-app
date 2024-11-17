@@ -30,10 +30,23 @@ export const InvalidSystemTimePage: FunctionComponent = (): ReactElement => {
 
   return (
     <DefaultLayout>
-      <h6 className="error-page_h6">
+      <h6 style={{
+          fontSize: "30px",
+          textTransform: "uppercase",
+          fontWeight: 600,
+          marginTop: "3rem",
+          marginBottom: "8px",
+          color: "#151515"
+        }}>
           Your Clock is Invalid !
       </h6>
-      <p className="error-page_p">
+      <p style={{
+          fontSize: "20px",
+          fontWeight: 400,
+          marginTop: "3rem",
+          marginBottom: "3rem",
+          color: "#151515"
+        }}>
           It looks like your computer&rsquo;s date and time is incorrect. Please validate and try again
       </p>
     </DefaultLayout>
