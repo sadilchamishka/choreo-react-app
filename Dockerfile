@@ -1,71 +1,35 @@
-# Copyright (c) 2023, WSO2 LLC. (https://www.wso2.com/) 
-# All Rights Reserved.
+FROM node:18-alpine
 
-# WSO2 LLC. licenses this file to you under the Apache License,
-# Version 2.0 (the "License"); you may not use this file except
-# in compliance with the License.
-# You may obtain a copy of the License at
-#
-#    http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied. See the License for the
-# specific language governing permissions and limitations
-# under the License.
+# Build arguments for user/group configurations
+ARG USER=asgusr
+ARG USER_ID=10001
+ARG USER_GROUP=asggrp
+ARG USER_GROUP_ID=10001
+ARG USER_HOME=/home/app
 
-# Use an official Node.js runtime as a parent image for building the React app
-FROM node:18 AS build
+# Create a user group and a user
+RUN addgroup -S -g ${USER_GROUP_ID} ${USER_GROUP} \
+    && adduser -S -D -h ${USER_HOME} -G ${USER_GROUP} -u ${USER_ID} ${USER}
 
-# Set the working directory in the container
-WORKDIR /app
+# Create app directory
+WORKDIR ${USER_HOME}
 
-# Copy package.json and package-lock.json to the container
-COPY package*.json ./
-
-# Install project dependencies
-RUN npm install
+# Set a non-root user
+USER ${USER_ID}
 
 # Copy the rest of the application code to the container
-COPY . .
+COPY --chown=${USER}:${USER_GROUP} . .
 
-# Build the React app for production
-RUN npm run build
+# Set environment variables
+ENV HOST="0.0.0.0"
+ENV DISABLE_DEV_SERVER_HOST_CHECK=true
+ENV HTTPS=false
 
-# Use a lightweight web server (nginx unprivileged) as the final parent image
-FROM nginxinc/nginx-unprivileged:alpine
+# Install dependencies
+RUN npm install
 
-# Environment variables to configure user permissions
-ENV ENABLE_PERMISSIONS=TRUE
-ENV DEBUG_PERMISSIONS=TRUE
-ENV USER_NGINX=10014
-ENV GROUP_NGINX=10014
+# Expose port 3000
+EXPOSE 3000
 
-# Set the working directory for NGINX
-WORKDIR /usr/share/nginx/html
-
-# Copy the built React app from the previous stage to the nginx web server directory
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Ensure proper permissions for NGINX to serve the files
-USER root
-# Create a user with a known UID/GID (10014) within the range 10000-20000 for Choreo
-RUN adduser \
-    --disabled-password \
-    --gecos "" \
-    --home "/nonexistent" \
-    --shell "/sbin/nologin" \
-    --no-create-home \
-    --uid 10014 \
-    "choreo"
-
-RUN chown -R ${USER_NGINX}:${GROUP_NGINX} /usr/share/nginx/html
-
-USER 10014
-
-# Expose port 8080 for the application
-EXPOSE 8080
-
-# Start the nginx web server
-CMD ["nginx", "-g", "daemon off;"]
+# Start the application
+CMD ["npm", "start"]

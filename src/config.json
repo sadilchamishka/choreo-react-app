@@ -1,0 +1,7 @@
+{
+    "clientID": "xl2TrvE2CVjaR5gVdKJqeFJ6Gika",
+    "baseUrl": "https://api.asgardeo.io/t/sadileasymeet1",
+    "signInRedirectURL": "https://localhost:3000",
+    "signOutRedirectURL": "https://localhost:3000",
+    "scope": ["profile email"]
+}
