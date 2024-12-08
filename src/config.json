@@ -1,7 +1,7 @@
 {
     "clientID": "xl2TrvE2CVjaR5gVdKJqeFJ6Gika",
     "baseUrl": "https://api.asgardeo.io/t/sadileasymeet1",
-    "signInRedirectURL": "https://5d8353b3-76b9-43ad-94eb-ef283da0c127.e1-us-east-azure.choreoapps.dev",
-    "signOutRedirectURL": "https://5d8353b3-76b9-43ad-94eb-ef283da0c127.e1-us-east-azure.choreoapps.dev",
+    "signInRedirectURL": "https://consolev2.preview-dv.choreo.dev/signin",
+    "signOutRedirectURL": "https://consolev2.preview-dv.choreo.dev/signin",
     "scope": ["profile email"]
 }

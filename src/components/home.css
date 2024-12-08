@@ -48,4 +48,36 @@
     width: 150px;
     margin: 0 auto;
   }
-  
+  .home-container {
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.input-form {
+    margin: 20px auto;
+    max-width: 400px;
+    display: grid;
+    gap: 10px;
+}
+
+.input-form label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.progress-container {
+    margin-top: 20px;
+}
