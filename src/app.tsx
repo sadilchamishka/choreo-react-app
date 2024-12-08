@@ -20,10 +20,10 @@ import { AuthProvider, useAuthContext } from "@asgardeo/auth-react";
 import React, { FunctionComponent, ReactElement } from "react";
 import { render } from "react-dom";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import "app.css";
+import "./app.css";
 import { ErrorBoundary } from "./error-boundary";
 import { HomePage, NotFoundPage } from "./pages";
-import { getConfig } from "./util/getConfig";
+import { default as authConfig } from "./config.json";
 
 const AppContent: FunctionComponent = (): ReactElement => {
     const { error } = useAuthContext();
@@ -41,7 +41,7 @@ const AppContent: FunctionComponent = (): ReactElement => {
 };
 
 const App = () => (
-    <AuthProvider config={getConfig()}>
+    <AuthProvider config={authConfig}>
         <AppContent />
     </AuthProvider>
 );
