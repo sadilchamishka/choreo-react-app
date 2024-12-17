@@ -1,4 +1,3 @@
-import { BasicUserInfo } from "@asgardeo/auth-react";
 import React, { FunctionComponent, ReactElement, useState } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -25,25 +24,57 @@ export const AuthenticationResponse: FunctionComponent<AuthenticationResponsePro
 
     const [prediction, setPrediction] = useState('');
     const [risk, setRisk] = useState(0); // Progress cycle percentage
+    const [loading, setLoading] = useState(false); // Loading state for API call
+    const [error, setError] = useState(''); // Error message state
 
-    const handleChange = (e: { target: { name: any; value: any; }; }) => {
+    const handleChange = (e: { target: { name: string; value: string } }) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
         });
     };
 
-    const handleSubmit = (e: { preventDefault: () => void; }) => {
+    const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
+        setLoading(true);
+        setError('');
 
-        // Example logic for prediction and risk calculation
-        const calculatedRisk = Math.random() * 100;
-        setRisk(parseFloat(calculatedRisk.toFixed(2))); // Update risk
-        setPrediction(
-            calculatedRisk > 50
-                ? "You are at risk of getting Kidney Stone"
-                : "You are not at risk of getting Kidney Stone"
-        );
+        // Prepare API request
+        const url = new URL('https://31a57f13-21c4-482e-a01e-44560ede5feb-dev.e1-us-east-azure.choreoapis.dev/ewbb/reading-books-list-service/v1.0/predict');
+        url.searchParams.append('param1', formData.gravity);
+        url.searchParams.append('param2', formData.ph);
+        url.searchParams.append('param3', formData.osmo);
+        url.searchParams.append('param4', formData.cond);
+        url.searchParams.append('param5', formData.urea);
+        url.searchParams.append('param6', formData.calc);
+
+        const headers = {
+            accept: 'application/json',
+            'Test-Key': 'eyJraWQiOiJ' // Replace this with the actual test key
+        };
+
+        try {
+            const response = await fetch(url.toString(), { headers });
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            // Assuming the API response has a risk percentage field called `riskValue`
+            const calculatedRisk = data.riskValue || 0; // Adjust according to the API's actual response format
+            setRisk(parseFloat(calculatedRisk.toFixed(2)));
+
+            setPrediction(
+                calculatedRisk > 50
+                    ? "You are at risk of getting Kidney Stone"
+                    : "You are not at risk of getting Kidney Stone"
+            );
+        } catch (error: any) {
+            setError('Failed to fetch risk prediction. Please try again later.');
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -110,8 +141,11 @@ export const AuthenticationResponse: FunctionComponent<AuthenticationResponsePro
                         required
                     />
                 </label>
-                <button type="submit">Submit</button>
+                <button type="submit" disabled={loading}>
+                    {loading ? 'Submitting...' : 'Submit'}
+                </button>
             </form>
+            {error && <div className="error-message">{error}</div>}
             <div className="prediction-container">
                 <h3>Prediction: {prediction}</h3>
                 <div className="progress-container" style={{ width: 150, height: 150, margin: "auto" }}>
