@@ -50,7 +50,7 @@ export const AuthenticationResponse: FunctionComponent<AuthenticationResponsePro
 
         const headers = {
             accept: 'application/json',
-            'Test-Key': 'eyJraWQiOiJ' // Replace this with the actual test key
+            'Test-Key': 'eyJraWQiOiJnYXRld2F5X2NlcnRpZmljYXRlX2FsaWFzIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiI2MTExZmY5MC0wYzYwLTRiNjQtOGZhNy1hZGMxY2ZkZjAxYThAY2FyYm9uLnN1cGVyIiwiYXVkIjoiY2hvcmVvOmRlcGxveW1lbnQ6c2FuZGJveCIsImlzcyI6Imh0dHBzOlwvXC9zdHMuY2hvcmVvLmRldjo0NDNcL2FwaVwvYW1cL3B1Ymxpc2hlclwvdjJcL2FwaXNcL2ludGVybmFsLWtleSIsImtleXR5cGUiOiJTQU5EQk9YIiwic3Vic2NyaWJlZEFQSXMiOlt7InN1YnNjcmliZXJUZW5hbnREb21haW4iOm51bGwsIm5hbWUiOiJSZWFkaW5nIGJvb2tzIGxpc3Qgc2VydmljZSAtIEJvb2tzIFJFU1QgRW5kcG9pbnQiLCJjb250ZXh0IjoiXC8zMWE1N2YxMy0yMWM0LTQ4MmUtYTAxZS00NDU2MGVkZTVmZWJcL2V3YmJcL3JlYWRpbmctYm9va3MtbGlzdC1zZXJ2aWNlXC92MS4wIiwicHVibGlzaGVyIjoiY2hvcmVvX3Byb2RfYXBpbV9hZG1pbiIsInZlcnNpb24iOiJ2MS4wIiwic3Vic2NyaXB0aW9uVGllciI6bnVsbH1dLCJleHAiOjE3MzQ0OTIzODcsInRva2VuX3R5cGUiOiJJbnRlcm5hbEtleSIsImlhdCI6MTczNDQ5MTc4NywianRpIjoiMjdhYWY3ZjQtZTEwOS00ZDc0LTk3NzMtZTk4YzlhOTdlY2NiIn0.GdomR9EZ93E-lRpBfnKbQ9RY0CRPBFUj1Hmim1tsOKMUrzvfpdqsCzXepCTG2iKcT4dMwvQAH-KAsnuYexnRilbT3ShXqMleBehofaM04q-X1EolmFKnhA5unsfWnvSX71hAsXZK41vbWD9jSdL87AYdOfutm2KvZukfylFqkx_343GS8tBNWSm111sLYU8N1tk7wNlDGnRwWfyxoZMt-beR-3Pd8TMgPH5un2KtrRIgZ-NArmEg7RDSZhpCd7QPnb7lT4J9w1N_yfmQiSlZrNC0j9PPwffbTc4qtK-I1UACweFg5FUlc9flLdcGaJwruxAE0jK-Nl0z3RBAKzFbpf-Gcwjd1kEISknLvtFI5SKblEesL6Y5RY-HfFRtXSp0LT98CfKH7EZiqiiOGs_dx5c5sdg8ITYK-G53iQHNWKPsw2ERxjvo7eiGx-AtR5K1B68t5JpEPBWR9jBBcI1JHKKjfiQqpt5vqbE1Pqsi6ZNxFX96GBhjU1JdkQhVxHDBaP9JNeYOcPPYgbTZ80aJaPS2kVkau0U35_koX2bojCXr3GHYCK9xZUP7Iu3ZbeExwAoWXhxnBu1_eOVZmNoQprYEYf_kUaHtmVKB72NHgLGBbkv1Jz1reMm-sMIW9GS8pr05Jriwn_c-oZvMiP3iI1mArT2F3comxS6Aq-l8zH4'
         };
 
         try {
@@ -60,8 +60,7 @@ export const AuthenticationResponse: FunctionComponent<AuthenticationResponsePro
             }
 
             const data = await response.json();
-            // Assuming the API response has a risk percentage field called `riskValue`
-            const calculatedRisk = data.riskValue || 0; // Adjust according to the API's actual response format
+            const calculatedRisk = data*100;
             setRisk(parseFloat(calculatedRisk.toFixed(2)));
 
             setPrediction(
